@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IITM Placement Cell — HR Outreach</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0f;--surface:#111118;--surface2:#18181f;--surface3:#1e1e28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--accent:#c8ff3e;--accent2:#3effc8;--text:#f0f0f8;--muted:#7a7a8a;--muted2:#4a4a5a;--danger:#ff4e4e;--warn:#ffb347;--success:#3effc8;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--font-mono:'DM Mono',monospace;--radius:10px;--radius-lg:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:14px;min-height:100vh;line-height:1.6}
+.shell{display:flex;min-height:100vh}
+.sidebar{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:10;overflow-y:auto}
+.main{margin-left:260px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+.logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
+.logo-badge{display:inline-block;background:var(--accent);color:#0a0a0f;font-family:var(--font-head);font-size:10px;font-weight:700;letter-spacing:.1em;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.logo h1{font-family:var(--font-head);font-size:16px;font-weight:700;line-height:1.3}
+.logo p{font-size:12px;color:var(--muted);margin-top:3px}
+.nav{padding:16px 12px;flex:1}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--muted);transition:all .15s;margin-bottom:2px;border:1px solid transparent}
+.nav-item:hover{color:var(--text);background:var(--surface2)}
+.nav-item.active{color:var(--accent);background:rgba(200,255,62,.07);border-color:rgba(200,255,62,.15)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+.nav-section-label{font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--muted2);padding:8px 12px 4px;text-transform:uppercase}
+.config-section{padding:14px;border-top:1px solid var(--border)}
+.config-section label{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}
+.config-section input,.config-section select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:7px 10px;font-size:12px;color:var(--text);font-family:var(--font-mono);margin-bottom:8px;outline:none;transition:border .15s}
+.config-section input:focus{border-color:rgba(200,255,62,.4)}
+.conn-status{display:flex;align-items:center;gap:6px;font-size:11px;padding:6px 10px;border-radius:var(--radius);margin-bottom:8px}
+.conn-ok{background:rgba(62,255,200,.08);color:var(--accent2);border:1px solid rgba(62,255,200,.2)}
+.conn-fail{background:rgba(255,78,78,.08);color:var(--danger);border:1px solid rgba(255,78,78,.2)}
+.conn-idle{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.topbar{padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);position:sticky;top:0;z-index:5}
+.topbar-title{font-family:var(--font-head);font-size:18px;font-weight:600}
+.stat-pills{display:flex;gap:8px}
+.stat-pill{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:var(--muted)}
+.stat-pill .dot{width:7px;height:7px;border-radius:50%}
+.dot-green{background:var(--accent2);box-shadow:0 0 6px var(--accent2)}
+.dot-yellow{background:var(--warn)}
+.dot-red{background:var(--danger)}
+.content{padding:24px 28px;flex:1}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-header h3{font-family:var(--font-head);font-size:14px;font-weight:600}
+.card-body{padding:20px}
+.table-wrap{overflow-x:auto;border-radius:var(--radius-lg);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:var(--surface2)}
+th{padding:11px 14px;text-align:left;font-family:var(--font-head);font-size:10px;font-weight:600;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--surface2)}
+.email-cell{font-family:var(--font-mono);font-size:11px;color:var(--accent2)}
+.job-role{display:inline-block;padding:2px 9px;background:rgba(200,255,62,.08);border:1px solid rgba(200,255,62,.2);border-radius:20px;font-size:11px;color:var(--accent);white-space:nowrap}
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11px;white-space:nowrap}
+.status-pending{background:rgba(255,179,71,.1);color:var(--warn);border:1px solid rgba(255,179,71,.2)}
+.status-sent{background:rgba(62,255,200,.1);color:var(--accent2);border:1px solid rgba(62,255,200,.2)}
+.status-failed{background:rgba(255,78,78,.1);color:var(--danger);border:1px solid rgba(255,78,78,.2)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:var(--font-body);transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#0a0a0f}
+.btn-primary:hover{background:#d4ff55;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.4;cursor:default;transform:none}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--border2);background:var(--surface2)}
+.btn-danger{background:rgba(255,78,78,.1);color:var(--danger);border:1px solid rgba(255,78,78,.2)}
+.btn-sm{padding:5px 12px;font-size:12px}
+input[type=text],input[type=email],input[type=password],input[type=url],input[type=number],input[type=time],textarea,select{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--font-body);outline:none;width:100%;transition:border .15s}
+input:focus,textarea:focus,select:focus{border-color:rgba(200,255,62,.4)}
+textarea{resize:vertical;line-height:1.7}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.drop-area{border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface2)}
+.drop-area:hover,.drop-area.drag{border-color:var(--accent);background:rgba(200,255,62,.04)}
+.progress-outer{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:14px}
+.progress-bar-wrap{background:var(--surface3);border-radius:4px;height:6px;overflow:hidden;margin:10px 0}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:4px;transition:width .4s ease}
+.progress-stats{display:flex;gap:20px;font-size:12px}
+.log-container{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow-y:auto;padding:12px 14px;font-family:var(--font-mono);font-size:12px}
+.log-entry{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.03)}
+.log-entry:last-child{border-bottom:none}
+.log-time{color:var(--muted2);margin-right:8px}
+.log-ok{color:var(--accent2)}
+.log-err{color:var(--danger)}
+.log-info{color:var(--muted)}
+.log-warn{color:var(--warn)}
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px}
+.stat-card .label{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+.stat-card .value{font-family:var(--font-head);font-size:26px;font-weight:700}
+.val-green{color:var(--accent)} .val-teal{color:var(--accent2)} .val-warn{color:var(--warn)} .val-red{color:var(--danger)}
+.cron-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:14px}
+.toggle-switch{width:44px;height:24px;background:var(--surface3);border-radius:12px;cursor:pointer;position:relative;border:1px solid var(--border2);transition:background .2s;flex-shrink:0}
+.toggle-switch.on{background:var(--accent);border-color:var(--accent)}
+.toggle-knob{width:18px;height:18px;background:var(--muted);border-radius:50%;position:absolute;top:2px;left:2px;transition:transform .2s,background .2s}
+.toggle-switch.on .toggle-knob{transform:translateX(20px);background:#0a0a0f}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:26px;width:580px;max-width:95vw;max-height:88vh;overflow-y:auto}
+.modal-box h2{font-family:var(--font-head);font-size:18px;margin-bottom:6px}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+.email-preview{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:8px}
+.email-preview-header{padding:12px 16px;background:var(--surface3);border-bottom:1px solid var(--border);font-size:12px;color:var(--muted)}
+.email-preview-body{padding:16px;font-size:13px;line-height:1.85;color:var(--text);white-space:pre-wrap;min-height:140px}
+.alert{padding:12px 16px;border-radius:var(--radius);font-size:13px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
+.alert-warn{background:rgba(255,179,71,.1);border:1px solid rgba(255,179,71,.25);color:var(--warn)}
+.alert-info{background:rgba(62,255,200,.07);border:1px solid rgba(62,255,200,.2);color:var(--accent2)}
+.alert-danger{background:rgba(255,78,78,.1);border:1px solid rgba(255,78,78,.25);color:var(--danger)}
+.steps{counter-reset:step;display:flex;flex-direction:column;gap:10px}
+.step{display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius)}
+.step-num{width:24px;height:24px;border-radius:50%;background:rgba(200,255,62,.12);border:1px solid rgba(200,255,62,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0}
+.step-body{font-size:13px;line-height:1.6}
+.step-body strong{color:var(--text);display:block;margin-bottom:2px}
+.step-body code{font-family:var(--font-mono);font-size:11px;background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:1px 5px;color:var(--accent2)}
+.tag{font-family:var(--font-mono);font-size:11px;background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:1px 6px;color:var(--accent2)}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:var(--surface)}::-webkit-scrollbar-thumb{background:var(--muted2);border-radius:3px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .25s ease forwards}
+input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-badge">IITM</div>
+    <h1>Placement Cell<br>Outreach</h1>
+    <p>HR Email Automation</p>
+  </div>
+  <nav class="nav">
+    <div class="nav-section-label">Workspace</div>
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('recipients')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Recipients
+    </div>
+    <div class="nav-item" onclick="showPage('compose')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Compose
+    </div>
+    <div class="nav-item" onclick="showPage('send')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Campaign
+    </div>
+    <div class="nav-section-label" style="margin-top:8px">Settings</div>
+    <div class="nav-item" onclick="showPage('setup')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>Setup & Keys
+    </div>
+    <div class="nav-item" onclick="showPage('cron')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Schedule
+    </div>
+    <div class="nav-item" onclick="showPage('logs')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Send Logs
+    </div>
+  </nav>
+  <div class="config-section">
+    <label>Backend URL</label>
+    <input type="url" id="backend-url" placeholder="https://your-app.onrender.com" oninput="saveConfig()">
+    <div id="conn-indicator" class="conn-status conn-idle">⚪ Not tested</div>
+    <button class="btn btn-ghost btn-sm" onclick="testConnection()" style="width:100%;justify-content:center;margin-bottom:8px;">Test Connection</button>
+    <label style="font-size:10px;color:var(--muted2);">Keys are stored in Setup page</label>
+  </div>
+</aside>
+
+<div class="main">
+<div class="topbar">
+  <div id="topbar-title" class="topbar-title">Dashboard</div>
+  <div class="stat-pills">
+    <div class="stat-pill"><div class="dot dot-green"></div><span id="top-sent">0 sent</span></div>
+    <div class="stat-pill"><div class="dot dot-yellow"></div><span id="top-pending">0 pending</span></div>
+    <div class="stat-pill"><div class="dot dot-red"></div><span id="top-failed">0 failed</span></div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ── DASHBOARD ── -->
+<div id="page-dashboard" class="tab-pane active fade-in">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="label">Total</div><div class="value val-green" id="stat-total">0</div><div style="font-size:11px;color:var(--muted)">recipients</div></div>
+    <div class="stat-card"><div class="label">Sent</div><div class="value val-teal" id="stat-sent">0</div><div style="font-size:11px;color:var(--muted)">delivered</div></div>
+    <div class="stat-card"><div class="label">Pending</div><div class="value val-warn" id="stat-pending">0</div><div style="font-size:11px;color:var(--muted)">to send</div></div>
+    <div class="stat-card"><div class="label">Failed</div><div class="value val-red" id="stat-failed">0</div><div style="font-size:11px;color:var(--muted)">check logs</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="card">
+      <div class="card-header"><h3>Quick Start</h3></div>
+      <div class="card-body">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><strong>Setup API keys</strong>Go to Setup & Keys page → add Gemini key + Gmail</div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Import your sheet</strong>Recipients → upload CSV exported from Google Sheets</div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><strong>Configure & preview</strong>Compose page → preview AI-generated email per HR</div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><strong>Send or schedule</strong>Send Campaign → one click or set daily cron</div></div>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('setup')" style="margin-top:14px;width:100%;justify-content:center">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07"/></svg>
+          Start Setup
+        </button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Activity Log</h3></div>
+      <div class="log-container" id="dashboard-log" style="height:260px;border:none;border-radius:0">
+        <div class="log-entry"><span class="log-time">--:--</span><span class="log-info">App loaded. Ready.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SETUP PAGE ── -->
+<div id="page-setup" class="tab-pane fade-in">
+  <h2 style="font-family:var(--font-head);font-size:20px;margin-bottom:4px">Setup & API Keys</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Configure Gmail + Gemini once. Saved in browser localStorage.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div>
+      <!-- GEMINI -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><h3>🤖 Gemini API Key (Free)</h3></div>
+        <div class="card-body">
+          <div class="field">
+            <label>API Key</label>
+            <input type="password" id="gemini-key" placeholder="AIzaSy..." oninput="saveConfig()">
+          </div>
+          <div class="alert alert-info">
+            <span>ℹ</span>
+            <div>Get free key at <strong>aistudio.google.com</strong> → Get API key → Create API key. Gemini 1.5 Flash is free (60 req/min).</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="testGemini()">Test Gemini Key</button>
+          <span id="gemini-test-result" style="font-size:12px;margin-left:10px;color:var(--muted)"></span>
+        </div>
+      </div>
+
+      <!-- GMAIL -->
+      <div class="card">
+        <div class="card-header"><h3>📧 Gmail Configuration</h3></div>
+        <div class="card-body">
+          <div class="field">
+            <label>Your Gmail address</label>
+            <input type="email" id="sender-email" placeholder="prakashmohit21x@gmail.com" oninput="saveConfig()">
+          </div>
+          <div class="field">
+            <label>Gmail App Password <span style="color:var(--accent);font-size:11px">(NOT your regular password)</span></label>
+            <input type="password" id="gmail-pass" placeholder="xxxx xxxx xxxx xxxx" oninput="saveConfig()">
+          </div>
+          <div class="field">
+            <label>From Name (shown to recipients)</label>
+            <input type="text" id="from-name" value="IITM Placement Cell" oninput="saveConfig()">
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="testGmail()">Test Gmail Connection</button>
+          <span id="gmail-test-result" style="font-size:12px;margin-left:10px;color:var(--muted)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- APP PASSWORD GUIDE -->
+    <div>
+      <div class="card">
+        <div class="card-header"><h3>🔐 How to get Gmail App Password</h3></div>
+        <div class="card-body">
+          <div class="alert alert-warn" style="margin-bottom:16px">
+            <span>⚠</span>
+            <div>App Password is a <strong>16-character code</strong> Gmail generates. You use it instead of your real password so apps can send email securely.</div>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Enable 2-Factor Authentication</strong>
+                Go to <code>myaccount.google.com</code> → Security → 2-Step Verification → Turn ON (required first)
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Open App Passwords</strong>
+                Go to <code>myaccount.google.com/apppasswords</code> (direct link)
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Create new app password</strong>
+                App name: type <code>IITM Mailer</code> → click Create
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <strong>Copy the 16-character code</strong>
+                Looks like: <code>abcd efgh ijkl mnop</code> — paste it above (spaces are OK)
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info" style="margin-top:14px">
+            <span>✓</span>
+            <div>After this, emails you send will appear in your <strong>Gmail Sent box</strong> normally.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="card-header"><h3>🚀 Deploy Backend (for real sending)</h3></div>
+        <div class="card-body" style="font-size:13px;line-height:1.9;color:var(--muted)">
+          <p style="margin-bottom:10px">This app needs a <strong style="color:var(--text)">Node.js backend</strong> to actually send emails (browsers can't do SMTP).</p>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-body"><strong>Upload to GitHub</strong>Upload the <code>server.js</code> + <code>package.json</code> + this <code>index.html</code> (in a <code>public/</code> folder)</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-body"><strong>Go to render.com → New Web Service</strong>Connect your GitHub repo. It's free.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Set Environment Variables on Render</strong>
+                <code>GMAIL_USER</code>, <code>GMAIL_PASS</code>, <code>GEMINI_KEY</code>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-body"><strong>Paste the Render URL</strong> in the Backend URL field in the sidebar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── RECIPIENTS ── -->
+<div id="page-recipients" class="tab-pane fade-in">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+    <div>
+      <h2 style="font-family:var(--font-head);font-size:20px">Recipients</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:3px">Upload Google Sheet exported as CSV. Columns: S No, Date, Company Name, Job Post, Job Post Link, Email ID</p>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="clearRecipients()">Clear all</button>
+      <button class="btn btn-primary btn-sm" onclick="document.getElementById('csv-upload').click()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload CSV
+      </button>
+      <input type="file" id="csv-upload" accept=".csv,.tsv,.txt" style="display:none" onchange="handleCSVUpload(event)">
+    </div>
+  </div>
+
+  <div id="drop-area" class="drop-area" onclick="document.getElementById('csv-upload').click()"
+    ondragover="event.preventDefault();this.classList.add('drag')"
+    ondragleave="this.classList.remove('drag')"
+    ondrop="handleDrop(event)">
+    <div style="font-size:36px;margin-bottom:10px">📊</div>
+    <p style="font-size:14px;margin-bottom:4px">Drop your Google Sheet CSV here or click to upload</p>
+    <span style="font-size:12px;color:var(--muted)">Detected columns: S No · Date · Company Name · Job Post · Job Post Link · Email ID</span>
+  </div>
+
+  <div style="margin:18px 0;display:flex;align-items:center;gap:12px;color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.06em">
+    <div style="flex:1;height:1px;background:var(--border)"></div>or paste CSV data<div style="flex:1;height:1px;background:var(--border)"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:20px">
+    <textarea id="paste-area" placeholder="1,,SnapMint,Data Analyst,,roshani.singh@snapmint.com&#10;2,,Vdart,Data Scientist,,tharanee.m@vdartinc.com" style="height:80px;font-family:var(--font-mono);font-size:12px"></textarea>
+    <button class="btn btn-ghost" onclick="parsePastedData()" style="align-self:flex-end">Parse</button>
+  </div>
+
+  <div id="recipients-table-wrap" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-size:13px;color:var(--muted)"><strong id="rec-count" style="color:var(--accent)">0</strong> recipients</div>
+      <div id="domain-filter" style="display:flex;gap:6px"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th><input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)"></th>
+          <th>#</th><th>Company</th><th>Job Post</th><th>Email</th><th>Domain</th><th>Status</th><th>Actions</th>
+        </tr></thead>
+        <tbody id="recipients-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div id="no-recipients" style="text-align:center;padding:50px 20px;color:var(--muted);display:none">
+    <div style="font-size:40px;margin-bottom:12px;opacity:.3">📭</div>
+    <h3 style="font-family:var(--font-head);color:var(--text);margin-bottom:6px">No recipients yet</h3>
+    <p>Upload CSV or paste data above</p>
+  </div>
+</div>
+
+<!-- ── COMPOSE ── -->
+<div id="page-compose" class="tab-pane fade-in">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+    <div>
+      <h2 style="font-family:var(--font-head);font-size:20px;margin-bottom:18px">Email Template</h2>
+      <div class="card" style="padding:20px">
+        <div class="field">
+          <label>Email Subject</label>
+          <input type="text" id="subject-template" value="Placement Opportunity — IITM Students | {{job_post}} at {{company}}" oninput="saveConfig()">
+          <div style="font-size:11px;color:var(--muted);margin-top:5px">Variables: <span class="tag">{{company}}</span> <span class="tag">{{job_post}}</span> <span class="tag">{{domain}}</span></div>
+        </div>
+        <div class="field">
+          <label>AI Prompt for Gemini <span style="color:var(--muted);font-weight:400">(full email generated from this)</span></label>
+          <textarea id="ai-prompt-template" rows="13" oninput="saveConfig()">Write a professional cold outreach email on behalf of IITM (IIT Madras) Placement Cell.
+
+Details:
+- HR/Recipient: {{hr_name}}
+- Company: {{company}}  
+- Job Role they posted: {{job_post}}
+- Their LinkedIn Post: {{job_link}}
+- Our Domain focus: {{domain}}
+
+Requirements for the email:
+1. Start with "Dear {{hr_name}}," (use "Hiring Manager" if name unknown)
+2. First line: mention you saw their LinkedIn post for {{job_post}} role at {{company}}
+3. Second paragraph: introduce IITM Placement Cell — IIT Madras, one of India's top institutions, our students have strong theoretical + practical {{domain}} skills, hands-on projects, internship experience
+4. Third paragraph: express interest in connecting, offer to share student profiles/CVs that match their requirements
+5. Close: ask for a brief call or to share the JD — clear CTA
+6. Keep it 160-200 words total. Professional but warm tone.
+
+IMPORTANT: Output ONLY the email body text. No subject line. No preamble like "Here is your email". Start directly with "Dear".</textarea>
+        </div>
+        <div class="field">
+          <label>Email Signature</label>
+          <textarea id="signature" rows="4" oninput="saveConfig()">Best regards,
+[Your Name]
+IITM Placement Cell, IIT Madras
+📧 placement@iitm.ac.in | 🌐 iitm.ac.in</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+        <h2 style="font-family:var(--font-head);font-size:20px">Live Preview</h2>
+        <button class="btn btn-ghost btn-sm" onclick="generatePreview()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Generate
+        </button>
+      </div>
+      <div class="field">
+        <label>Preview for recipient</label>
+        <select id="preview-recipient">
+          <option value="">-- Select a recipient --</option>
+        </select>
+      </div>
+      <div class="email-preview" id="email-preview-box">
+        <div class="email-preview-header">
+          <div><strong>To:</strong> <span id="pv-to">—</span></div>
+          <div style="margin-top:3px"><strong>Subject:</strong> <span id="pv-subject">—</span></div>
+        </div>
+        <div class="email-preview-body" id="pv-body">Select a recipient and click Generate to see AI-personalized email.</div>
+      </div>
+      <div id="pv-char-count" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:right"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SEND ── -->
+<div id="page-send" class="tab-pane fade-in">
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+    <div>
+      <h2 style="font-family:var(--font-head);font-size:20px;margin-bottom:4px">Send Campaign</h2>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:18px">Gemini generates a unique personalized email per HR, then sends via your Gmail</p>
+
+      <div id="backend-warning" class="alert alert-warn" style="display:none">
+        <span>⚠</span>
+        <div>Backend URL not set. Go to sidebar → paste your Render.com URL. <a onclick="showPage('setup')" style="color:var(--accent);cursor:pointer;text-decoration:underline">See Setup guide →</a></div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><h3>Campaign Settings</h3></div>
+        <div class="card-body">
+          <div class="field-row">
+            <div class="field">
+              <label>Send to domain</label>
+              <select id="send-domain"><option value="all">All domains</option><option value="Data Science">Data Science</option><option value="Embedded Systems">Embedded Systems</option></select>
+            </div>
+            <div class="field">
+              <label>Recipients filter</label>
+              <select id="send-filter"><option value="pending">Pending only (new)</option><option value="all">All (re-send)</option><option value="failed">Failed (retry)</option></select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Delay between emails (seconds) — keep 3-5 to avoid Gmail rate limits</label>
+            <input type="number" id="send-delay" value="4" min="2" max="60" style="width:100px">
+          </div>
+        </div>
+      </div>
+
+      <div id="progress-section" style="display:none">
+        <div class="progress-outer">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span id="progress-label" style="font-size:13px;font-weight:500">Sending...</span>
+            <span id="progress-pct" style="font-size:13px;color:var(--accent);font-family:var(--font-mono)">0%</span>
+          </div>
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+          <div class="progress-stats">
+            <span id="ps-sent" style="color:var(--accent2)">0 sent</span>
+            <span id="ps-failed" style="color:var(--danger)">0 failed</span>
+            <span id="ps-remaining" style="color:var(--muted)">calculating...</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px">
+        <button class="btn btn-primary" id="start-btn" onclick="startCampaign()" style="flex:1;justify-content:center;padding:13px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Start Campaign
+        </button>
+        <button class="btn btn-ghost" id="stop-btn" onclick="stopCampaign()" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12"/></svg>Stop
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="font-family:var(--font-head);font-size:15px;margin-bottom:10px">Live Log</h3>
+      <div class="log-container" id="send-log" style="height:420px">
+        <div class="log-entry"><span class="log-time">--:--</span><span class="log-info">Ready. Press Start Campaign.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SCHEDULE ── -->
+<div id="page-cron" class="tab-pane fade-in">
+  <h2 style="font-family:var(--font-head);font-size:20px;margin-bottom:4px">Schedule / Automation</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Auto-detect new rows from Google Sheet and send daily at fixed time</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div>
+      <div class="cron-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div><div style="font-size:14px;font-weight:500">Daily scheduled send</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Auto-send to pending recipients at set time</div></div>
+          <div class="toggle-switch" id="cron-toggle" onclick="toggleCron()"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="field"><label>Send time (IST)</label><input type="time" id="cron-time" value="09:00" oninput="saveConfig()"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" class="day-check" value="Mon" checked>Mon</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" class="day-check" value="Tue" checked>Tue</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" class="day-check" value="Wed" checked>Wed</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" class="day-check" value="Thu" checked>Thu</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" class="day-check" value="Fri" checked>Fri</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" class="day-check" value="Sat">Sat</label>
+        </div>
+        <div id="cron-status" style="font-size:12px;color:var(--muted);padding:10px;background:var(--surface2);border-radius:var(--radius)">Cron <strong style="color:var(--danger)">disabled</strong></div>
+      </div>
+      <div class="cron-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div><div style="font-size:14px;font-weight:500">Auto-detect new sheet rows</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Polls Google Sheet CSV link for new emails</div></div>
+          <div class="toggle-switch" id="poll-toggle" onclick="togglePoll()"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="field"><label>Google Sheet public CSV URL</label><input type="url" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv" oninput="saveConfig()"><div style="font-size:11px;color:var(--muted);margin-top:4px">Sheet → File → Share → Publish to web → CSV</div></div>
+        <div class="field"><label>Poll every (minutes)</label><input type="number" id="poll-interval" value="30" min="5" style="width:90px"></div>
+        <button class="btn btn-ghost btn-sm" onclick="fetchSheetNow()">Fetch Now</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>Cron Notes</h3></div>
+      <div class="card-body" style="font-size:13px;color:var(--muted);line-height:1.9">
+        <p style="margin-bottom:10px">Browser cron works while the tab is open. For 24/7 automation, use the Node.js backend's cron.</p>
+        <div style="background:rgba(200,255,62,.06);border:1px solid rgba(200,255,62,.15);border-radius:var(--radius);padding:12px">
+          <div style="font-size:12px;color:var(--accent);font-weight:500;margin-bottom:6px">💡 Best approach for your use case</div>
+          <div style="font-size:12px">Deploy backend on Render.com (free). Add a <code style="font-family:var(--font-mono);font-size:11px;background:var(--surface3);padding:1px 5px;border-radius:3px">node-cron</code> job in server.js to auto-read the Sheet URL and send at 9am IST daily — fully automated even when browser is closed.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LOGS ── -->
+<div id="page-logs" class="tab-pane fade-in">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+    <div><h2 style="font-family:var(--font-head);font-size:20px">Send Logs</h2><p style="font-size:13px;color:var(--muted);margin-top:3px">Full history of all campaign sends</p></div>
+    <button class="btn btn-danger btn-sm" onclick="clearLogs()">Clear logs</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Time</th><th>Email</th><th>Company</th><th>Job Post</th><th>Status</th><th>Message</th></tr></thead>
+      <tbody id="logs-tbody"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">No logs yet</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- PREVIEW MODAL -->
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal-box">
+    <h2>Email Preview</h2>
+    <p id="modal-desc" style="color:var(--muted);font-size:13px;margin-bottom:14px">AI-generated email</p>
+    <div class="email-preview">
+      <div class="email-preview-header">
+        <div><strong>To:</strong> <span id="modal-to">—</span></div>
+        <div style="margin-top:3px"><strong>Subject:</strong> <span id="modal-subject">—</span></div>
+      </div>
+      <div class="email-preview-body" id="modal-body" style="min-height:220px"></div>
+    </div>
+    <div id="modal-char-count" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:right"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      <button class="btn btn-primary" id="modal-send-btn" onclick="sendSingleEmail()">Send this email</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ STATE ═══════════════════════════════════════════════════
+let recipients = [];
+let logs = [];
+let isSending = false;
+let stopFlag = false;
+let cronTimer = null;
+let pollTimer = null;
+let cronOn = false;
+let pollOn = false;
+let previewIdx = null;
+
+// ═══ CONFIG ══════════════════════════════════════════════════
+function cfg(id) { return (document.getElementById(id)||{}).value || ''; }
+
+function saveConfig() {
+  const c = {
+    backendUrl: cfg('backend-url'), geminiKey: cfg('gemini-key'),
+    senderEmail: cfg('sender-email'), gmailPass: cfg('gmail-pass'),
+    fromName: cfg('from-name'), subjectTemplate: cfg('subject-template'),
+    aiPrompt: cfg('ai-prompt-template'), signature: cfg('signature'),
+    cronTime: cfg('cron-time'), sheetUrl: cfg('sheet-url'),
+    pollInterval: cfg('poll-interval'), sendDelay: cfg('send-delay')
+  };
+  localStorage.setItem('iitm_cfg', JSON.stringify(c));
+}
+
+function loadConfig() {
+  let c; try { c = JSON.parse(localStorage.getItem('iitm_cfg')||'{}'); } catch { c={}; }
+  const set = (id,v) => { const el=document.getElementById(id); if(el&&v) el.value=v; };
+  set('backend-url', c.backendUrl); set('gemini-key', c.geminiKey);
+  set('sender-email', c.senderEmail); set('gmail-pass', c.gmailPass);
+  set('from-name', c.fromName); set('subject-template', c.subjectTemplate);
+  set('ai-prompt-template', c.aiPrompt); set('signature', c.signature);
+  set('cron-time', c.cronTime); set('sheet-url', c.sheetUrl);
+  set('poll-interval', c.pollInterval); set('send-delay', c.sendDelay);
+}
+
+// ═══ NAVIGATION ══════════════════════════════════════════════
+const TITLES = {dashboard:'Dashboard',recipients:'Recipients',compose:'Compose Email',send:'Send Campaign',setup:'Setup & Keys',cron:'Schedule',logs:'Send Logs'};
+function showPage(name) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const p = document.getElementById('page-'+name);
+  if(p){ p.classList.add('active'); }
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')?.includes("'"+name+"'")) n.classList.add('active');
+  });
+  document.getElementById('topbar-title').textContent = TITLES[name]||name;
+  if(name==='compose') populatePreviewDropdown();
+  if(name==='send') checkBackendWarning();
+}
+
+// ═══ CONNECTION TEST ═════════════════════════════════════════
+async function testConnection() {
+  const url = cfg('backend-url').replace(/\/$/,'');
+  const el = document.getElementById('conn-indicator');
+  el.className='conn-status conn-idle'; el.textContent='⏳ Testing...';
+  try {
+    const r = await fetch(url+'/api/health', {signal: AbortSignal.timeout(5000)});
+    const d = await r.json();
+    if(d.ok){ el.className='conn-status conn-ok'; el.textContent='✓ Connected'; addLog('ok','Backend connected: '+url); }
+    else throw new Error('bad response');
+  } catch(e) {
+    el.className='conn-status conn-fail'; el.textContent='✗ Not reachable';
+    addLog('err','Backend not reachable: '+e.message);
+  }
+}
+
+async function testGemini() {
+  const key = cfg('gemini-key'); const el = document.getElementById('gemini-test-result');
+  if(!key){ el.textContent='⚠ No key entered'; el.style.color='var(--warn)'; return; }
+  el.textContent='Testing...'; el.style.color='var(--muted)';
+  try {
+    const r = await callGemini('Say "OK" only.', key);
+    el.textContent='✓ Working! Response: '+r.slice(0,30);
+    el.style.color='var(--accent2)';
+  } catch(e) {
+    el.textContent='✗ '+e.message;
+    el.style.color='var(--danger)';
+  }
+}
+
+async function testGmail() {
+  const el = document.getElementById('gmail-test-result');
+  const url = cfg('backend-url').replace(/\/$/,'');
+  if(!url){ el.textContent='⚠ Set backend URL first'; el.style.color='var(--warn)'; return; }
+  el.textContent='Testing...'; el.style.color='var(--muted)';
+  try {
+    const r = await fetch(url+'/api/test-gmail', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email: cfg('sender-email'), appPassword: cfg('gmail-pass')})
+    });
+    const d = await r.json();
+    if(d.ok){ el.textContent='✓ Gmail connected!'; el.style.color='var(--accent2)'; }
+    else throw new Error(d.message);
+  } catch(e) {
+    el.textContent='✗ '+e.message;
+    el.style.color='var(--danger)';
+  }
+}
+
+function checkBackendWarning() {
+  const el = document.getElementById('backend-warning');
+  el.style.display = cfg('backend-url') ? 'none' : 'flex';
+}
+
+// ═══ GEMINI API CALL ═════════════════════════════════════════
+async function callGemini(prompt, keyOverride) {
+  const key = keyOverride || cfg('gemini-key');
+  if(!key) throw new Error('Gemini API key not set — go to Setup page');
+  const backendUrl = cfg('backend-url').replace(/\/$/,'');
+
+  // If backend is set, use it (avoids CORS issues and keeps key server-side)
+  if(backendUrl) {
+    const r = await fetch(backendUrl+'/api/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({prompt, geminiKey: key})
+    });
+    const d = await r.json();
+    if(!r.ok || d.error) throw new Error(d.error || 'Backend error');
+    return d.body;
+  }
+
+  // Direct Gemini call (fallback, works for testing)
+  const r = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+    { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        contents:[{parts:[{text:prompt}]}],
+        generationConfig:{ temperature:0.85, maxOutputTokens:700, topP:0.9 }
+      })
+    }
+  );
+  const d = await r.json();
+  if(!r.ok) throw new Error(d.error?.message||'Gemini error '+r.status);
+  const text = d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+  if(!text) throw new Error('Empty response from Gemini — check API key');
+  return text.trim();
+}
+
+function buildPrompt(r) {
+  return cfg('ai-prompt-template')
+    .replace(/{{hr_name}}/g, r.hrName||'Hiring Manager')
+    .replace(/{{company}}/g, r.company||'')
+    .replace(/{{job_post}}/g, r.jobPost||'')
+    .replace(/{{job_link}}/g, r.jobLink||'this LinkedIn post')
+    .replace(/{{domain}}/g, r.domain||'technology');
+}
+
+function buildSubject(r) {
+  return cfg('subject-template')
+    .replace(/{{company}}/g, r.company||'')
+    .replace(/{{job_post}}/g, r.jobPost||r.domain||'')
+    .replace(/{{hr_name}}/g, r.hrName||'')
+    .replace(/{{domain}}/g, r.domain||'');
+}
+
+// ═══ CSV PARSING ═════════════════════════════════════════════
+function parseLine(line) {
+  const res=[]; let cur=''; let inQ=false;
+  for(let c of line){ if(c==='"'){inQ=!inQ;}else if(c===','&&!inQ){res.push(cur);cur='';}else{cur+=c;} }
+  res.push(cur); return res.map(v=>v.trim().replace(/^"|"$/g,''));
+}
+
+function parseCSV(text) {
+  const lines = text.split('\n').filter(l=>l.trim());
+  const items = [];
+  const emailRe = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/;
+  for(const line of lines) {
+    const cols = parseLine(line);
+    if(cols.length < 3) continue;
+    // Skip header rows
+    if(cols.some(c=>['email id','email','s no','sno','s.no'].includes(c.toLowerCase()))) continue;
+    let email='', company='', jobPost='', jobLink='', sno='';
+    // Standard: S No, Date, Company, Job Post, Job Link, Email
+    if(cols.length >= 6 && emailRe.test(cols[5])) {
+      [sno,,company,jobPost,jobLink,email] = cols;
+    } else if(cols.length >= 5 && emailRe.test(cols[4])) {
+      [sno,,company,jobPost,email] = cols;
+    } else {
+      // Find email column
+      for(let i=0;i<cols.length;i++) if(emailRe.test(cols[i])){ email=cols[i]; break; }
+      company = cols[2]||''; jobPost = cols[3]||''; sno = cols[0]||'';
+    }
+    if(!email||!emailRe.test(email)) continue;
+    email = email.toLowerCase().trim();
+    if(recipients.find(r=>r.email===email)) continue;
+    const jp=(jobPost||'').toLowerCase();
+    const domain = (jp.includes('embedded')||jp.includes('firmware')||jp.includes('hardware')||jp.includes('iot')||jp.includes('vlsi'))
+      ? 'Embedded Systems' : 'Data Science';
+    items.push({ id:Date.now()+Math.random(), sno, company:company.trim(), jobPost:jobPost.trim(), jobLink:jobLink.trim(), email, domain, status:'pending', hrName:'' });
+  }
+  return items;
+}
+
+function handleCSVUpload(event) {
+  const file = event.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const items = parseCSV(e.target.result);
+    recipients.push(...items);
+    saveRecipients(); renderTable(); updateStats();
+    addLog('ok', `Loaded ${items.length} new recipients from ${file.name}`);
+    document.getElementById('drop-area').style.display = 'none';
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+function handleDrop(e) {
+  e.preventDefault(); document.getElementById('drop-area').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if(file) { const dt=new DataTransfer(); dt.items.add(file); handleCSVUpload({target:{files:[file]}}); }
+}
+function parsePastedData() {
+  const items = parseCSV(document.getElementById('paste-area').value);
+  if(!items.length){ alert('No valid rows found. Format: S No, Date, Company, Job Post, Job Link, Email'); return; }
+  recipients.push(...items); saveRecipients(); renderTable(); updateStats();
+  addLog('ok', `Parsed ${items.length} recipients`);
+  document.getElementById('drop-area').style.display = 'none';
+}
+function clearRecipients() {
+  if(!confirm('Clear all recipients?')) return;
+  recipients=[]; saveRecipients(); renderTable(); updateStats();
+}
+
+// ═══ TABLE RENDER ════════════════════════════════════════════
+function statusBadge(s) {
+  const map={pending:'status-pending',sent:'status-sent',failed:'status-failed'};
+  const ico={pending:'⏳',sent:'✓',failed:'✗'};
+  return `<span class="status-badge ${map[s]||'status-pending'}">${ico[s]||'⏳'} ${s||'pending'}</span>`;
+}
+
+function renderTable() {
+  const tbody=document.getElementById('recipients-tbody');
+  const wrap=document.getElementById('recipients-table-wrap');
+  const noRec=document.getElementById('no-recipients');
+  const dropArea=document.getElementById('drop-area');
+  document.getElementById('rec-count').textContent = recipients.length;
+
+  if(!recipients.length){
+    wrap.style.display='none'; noRec.style.display='block';
+    dropArea.style.display='block'; return;
+  }
+  wrap.style.display='block'; noRec.style.display='none';
+
+  // Domain filter chips
+  const domains=[...new Set(recipients.map(r=>r.domain))];
+  document.getElementById('domain-filter').innerHTML =
+    `<span style="font-size:12px;color:var(--muted2);padding:4px 6px;cursor:pointer;border-radius:20px;border:1px solid var(--border)" onclick="filterDomain('all',this)">All</span>` +
+    domains.map(d=>`<span style="font-size:12px;color:var(--muted);padding:4px 10px;cursor:pointer;border-radius:20px;border:1px solid var(--border)" onclick="filterDomain('${d}',this)">${d}</span>`).join('');
+
+  tbody.innerHTML = recipients.map((r,i)=>`
+    <tr id="row-${i}">
+      <td><input type="checkbox" class="rcheck" data-i="${i}" checked></td>
+      <td style="color:var(--muted);font-family:var(--font-mono);font-size:11px">${r.sno||i+1}</td>
+      <td style="font-weight:500;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.company||'—'}</td>
+      <td><span class="job-role">${r.jobPost||'—'}</span></td>
+      <td class="email-cell">${r.email}</td>
+      <td style="font-size:11px;color:var(--muted)">${r.domain}</td>
+      <td>${statusBadge(r.status)}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" onclick="previewSingle(${i})">👁 Preview</button>
+          <button class="btn btn-danger btn-sm" onclick="removeR(${i})">✕</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterDomain(domain, el) {
+  document.querySelectorAll('#domain-filter span').forEach(s=>s.style.color='var(--muted)');
+  el.style.color='var(--accent)';
+  document.querySelectorAll('#recipients-tbody tr').forEach((row,i)=>{
+    row.style.display=(domain==='all'||recipients[i]?.domain===domain)?'':'none';
+  });
+}
+function toggleSelectAll(checked) { document.querySelectorAll('.rcheck').forEach(cb=>cb.checked=checked); }
+function removeR(i){ recipients.splice(i,1); saveRecipients(); renderTable(); updateStats(); }
+
+// ═══ STATS ═══════════════════════════════════════════════════
+function updateStats() {
+  const t=recipients.length, s=recipients.filter(r=>r.status==='sent').length,
+        p=recipients.filter(r=>r.status==='pending').length, f=recipients.filter(r=>r.status==='failed').length;
+  ['total','sent','pending','failed'].forEach((k,i)=>{ const el=document.getElementById('stat-'+k); if(el) el.textContent=[t,s,p,f][i]; });
+  document.getElementById('top-sent').textContent=s+' sent';
+  document.getElementById('top-pending').textContent=p+' pending';
+  document.getElementById('top-failed').textContent=f+' failed';
+}
+
+// ═══ PREVIEW ═════════════════════════════════════════════════
+function populatePreviewDropdown() {
+  const sel=document.getElementById('preview-recipient');
+  sel.innerHTML='<option value="">-- Select recipient --</option>'+
+    recipients.map((r,i)=>`<option value="${i}">${r.company} — ${r.email}</option>`).join('');
+}
+
+async function generatePreview() {
+  const idx=parseInt(document.getElementById('preview-recipient').value);
+  if(isNaN(idx)||!recipients[idx]) return;
+  const r=recipients[idx];
+  document.getElementById('pv-to').textContent=r.email;
+  document.getElementById('pv-subject').textContent=buildSubject(r);
+  document.getElementById('pv-body').innerHTML='<span class="spinner"></span> Generating with Gemini...';
+  document.getElementById('pv-char-count').textContent='';
+  try {
+    const body=await callGemini(buildPrompt(r));
+    const full=body+(cfg('signature')?'\n\n'+cfg('signature'):'');
+    document.getElementById('pv-body').textContent=full;
+    document.getElementById('pv-char-count').textContent=`${full.split(/\s+/).length} words · ${full.length} chars`;
+  } catch(e) {
+    document.getElementById('pv-body').textContent='Error: '+e.message;
+  }
+}
+
+async function previewSingle(idx) {
+  const r=recipients[idx]; if(!r) return;
+  previewIdx=idx;
+  document.getElementById('modal-to').textContent=r.email;
+  document.getElementById('modal-subject').textContent=buildSubject(r);
+  document.getElementById('modal-desc').textContent=`${r.company} · ${r.jobPost}`;
+  document.getElementById('modal-body').innerHTML='<span class="spinner"></span> Generating personalized email with Gemini...';
+  document.getElementById('modal-char-count').textContent='';
+  document.getElementById('modal-send-btn').disabled=true;
+  document.getElementById('preview-modal').classList.add('open');
+  try {
+    const body=await callGemini(buildPrompt(r));
+    const full=body+(cfg('signature')?'\n\n'+cfg('signature'):'');
+    r._body=full;
+    document.getElementById('modal-body').textContent=full;
+    document.getElementById('modal-char-count').textContent=`${full.split(/\s+/).length} words · ${full.length} chars`;
+    document.getElementById('modal-send-btn').disabled=false;
+  } catch(e) {
+    document.getElementById('modal-body').textContent='Error: '+e.message;
+  }
+}
+
+async function sendSingleEmail() {
+  if(previewIdx===null) return;
+  const r=recipients[previewIdx];
+  const body=r._body||document.getElementById('modal-body').textContent;
+  const btn=document.getElementById('modal-send-btn');
+  btn.disabled=true; btn.textContent='Sending...';
+  try {
+    await doSend(r.email, buildSubject(r), body);
+    r.status='sent'; saveRecipients(); renderTable(); updateStats();
+    addLogEntry({time:new Date().toLocaleTimeString(), email:r.email, company:r.company, job:r.jobPost, status:'sent', msg:'OK'});
+    closeModal();
+  } catch(e) {
+    alert('Send failed: '+e.message);
+    btn.disabled=false; btn.textContent='Send this email';
+  }
+}
+
+function closeModal(){ document.getElementById('preview-modal').classList.remove('open'); }
+
+// ═══ ACTUAL EMAIL SEND ════════════════════════════════════════
+async function doSend(to, subject, body) {
+  const backendUrl=cfg('backend-url').replace(/\/$/,'');
+  if(!backendUrl) throw new Error('Backend URL not configured. See Setup page.');
+  const r=await fetch(backendUrl+'/api/send', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      to, subject, body,
+      fromName: cfg('from-name'), fromEmail: cfg('sender-email'),
+      appPassword: cfg('gmail-pass')
+    })
+  });
+  const d=await r.json();
+  if(!r.ok||d.error) throw new Error(d.error||'Send failed');
+  return d;
+}
+
+// ═══ CAMPAIGN ════════════════════════════════════════════════
+async function startCampaign() {
+  if(isSending) return;
+  if(!cfg('gemini-key')){ alert('Set Gemini API key in Setup page first'); showPage('setup'); return; }
+  const domain=cfg('send-domain'), filter=document.getElementById('send-filter').value;
+  const delay=Math.max(2,parseInt(cfg('send-delay'))||4)*1000;
+  let targets=recipients.filter(r=>{
+    if(domain!=='all'&&r.domain!==domain) return false;
+    if(filter==='pending'&&r.status!=='pending') return false;
+    if(filter==='failed'&&r.status!=='failed') return false;
+    return true;
+  });
+  // Only send to checked rows
+  const checked=new Set([...document.querySelectorAll('.rcheck:checked')].map(cb=>parseInt(cb.dataset.i)));
+  if(checked.size>0) targets=targets.filter((_,i)=>checked.has(recipients.indexOf(targets.filter(r=>r===targets[_]))));
+  if(!targets.length){ alert('No matching recipients to send.'); return; }
+
+  isSending=true; stopFlag=false;
+  document.getElementById('start-btn').disabled=true;
+  document.getElementById('stop-btn').style.display='';
+  document.getElementById('progress-section').style.display='block';
+  document.getElementById('send-log').innerHTML='';
+
+  let sent=0,failed=0;
+  for(let i=0;i<targets.length;i++){
+    if(stopFlag){ addSLog('warn','⏹ Stopped by user'); break; }
+    const r=targets[i];
+    const pct=Math.round((i/targets.length)*100);
+    document.getElementById('progress-fill').style.width=pct+'%';
+    document.getElementById('progress-pct').textContent=pct+'%';
+    document.getElementById('progress-label').textContent=`[${i+1}/${targets.length}] ${r.company} → ${r.email}`;
+    document.getElementById('ps-remaining').textContent=`${targets.length-i} remaining`;
+    addSLog('info',`[${i+1}/${targets.length}] Generating for ${r.company}...`);
+    try {
+      const body=await callGemini(buildPrompt(r));
+      const full=body+(cfg('signature')?'\n\n'+cfg('signature'):'');
+      addSLog('info',`  ✦ Generated (${full.split(/\s+/).length} words). Sending to ${r.email}...`);
+      await doSend(r.email, buildSubject(r), full);
+      r.status='sent'; sent++;
+      document.getElementById('ps-sent').textContent=sent+' sent';
+      addSLog('ok',`  ✓ Sent!`);
+      addLogEntry({time:new Date().toLocaleTimeString(),email:r.email,company:r.company,job:r.jobPost,status:'sent',msg:'OK'});
+    } catch(e) {
+      r.status='failed'; failed++;
+      document.getElementById('ps-failed').textContent=failed+' failed';
+      addSLog('err',`  ✗ ${e.message}`);
+      addLogEntry({time:new Date().toLocaleTimeString(),email:r.email,company:r.company,job:r.jobPost,status:'failed',msg:e.message});
+    }
+    saveRecipients(); updateStats(); renderTable();
+    if(i<targets.length-1&&!stopFlag){
+      addSLog('info',`  ⏱ Waiting ${delay/1000}s...`);
+      await new Promise(res=>setTimeout(res,delay));
+    }
+  }
+  document.getElementById('progress-fill').style.width='100%';
+  document.getElementById('progress-pct').textContent='100%';
+  document.getElementById('progress-label').textContent=`Done — ${sent} sent, ${failed} failed`;
+  addSLog('ok',`\n✅ Campaign complete: ${sent} sent, ${failed} failed`);
+  addLog('ok',`Campaign done: ${sent} sent, ${failed} failed`);
+  isSending=false;
+  document.getElementById('start-btn').disabled=false;
+  document.getElementById('stop-btn').style.display='none';
+}
+function stopCampaign(){ stopFlag=true; }
+
+// ═══ LOGS ════════════════════════════════════════════════════
+function addSLog(type, msg) {
+  const log=document.getElementById('send-log');
+  const e=document.createElement('div'); e.className='log-entry';
+  e.innerHTML=`<span class="log-time">${new Date().toLocaleTimeString()}</span><span class="log-${type}">${msg}</span>`;
+  log.appendChild(e); log.scrollTop=log.scrollHeight;
+}
+function addLog(type, msg) {
+  const log=document.getElementById('dashboard-log');
+  const e=document.createElement('div'); e.className='log-entry';
+  e.innerHTML=`<span class="log-time">${new Date().toLocaleTimeString()}</span><span class="log-${type}">${msg}</span>`;
+  log.appendChild(e); log.scrollTop=log.scrollHeight;
+}
+function addLogEntry(obj) {
+  logs.unshift(obj); saveLogs(); renderLogs();
+}
+function renderLogs() {
+  const tbody=document.getElementById('logs-tbody');
+  if(!logs.length){ tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">No logs yet</td></tr>'; return; }
+  tbody.innerHTML=logs.slice(0,300).map(l=>`
+    <tr>
+      <td style="font-family:var(--font-mono);font-size:11px;color:var(--muted);white-space:nowrap">${l.time}</td>
+      <td class="email-cell">${l.email}</td>
+      <td style="font-size:12px">${l.company}</td>
+      <td><span class="job-role">${l.job}</span></td>
+      <td>${statusBadge(l.status)}</td>
+      <td style="font-size:12px;color:var(--muted)">${l.msg}</td>
+    </tr>`).join('');
+}
+function clearLogs(){ if(!confirm('Clear logs?')) return; logs=[]; saveLogs(); renderLogs(); }
+
+// ═══ CRON ════════════════════════════════════════════════════
+function toggleCron() {
+  cronOn=!cronOn;
+  document.getElementById('cron-toggle').classList.toggle('on',cronOn);
+  if(cronOn){
+    const t=cfg('cron-time');
+    document.getElementById('cron-status').innerHTML=`Cron <strong style="color:var(--accent)">enabled</strong> — daily at ${t} IST`;
+    if(cronTimer) clearInterval(cronTimer);
+    cronTimer=setInterval(()=>{
+      if(!cronOn) return;
+      const now=new Date(), [h,m]=cfg('cron-time').split(':').map(Number);
+      const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const checked=[...document.querySelectorAll('.day-check:checked')].map(c=>c.value);
+      if(now.getHours()===h&&now.getMinutes()===m&&checked.includes(days[now.getDay()])){
+        addLog('ok','⏰ Cron triggered'); startCampaign();
+      }
+    },60000);
+  } else {
+    if(cronTimer){clearInterval(cronTimer);cronTimer=null;}
+    document.getElementById('cron-status').innerHTML=`Cron <strong style="color:var(--danger)">disabled</strong>`;
+  }
+}
+function togglePoll(){
+  pollOn=!pollOn;
+  document.getElementById('poll-toggle').classList.toggle('on',pollOn);
+  if(pollOn){ const m=parseInt(cfg('poll-interval'))||30; pollTimer=setInterval(fetchSheetNow,m*60000); }
+  else { if(pollTimer){clearInterval(pollTimer);pollTimer=null;} }
+}
+async function fetchSheetNow(){
+  const url=cfg('sheet-url'); if(!url){alert('Set sheet URL first'); return;}
+  addLog('info','Fetching sheet...');
+  try {
+    const r=await fetch(url); const text=await r.text();
+    const items=parseCSV(text);
+    if(items.length){ recipients.push(...items); saveRecipients(); renderTable(); updateStats(); addLog('ok',`${items.length} new emails from sheet`); }
+    else addLog('info','No new emails in sheet');
+  } catch(e){ addLog('err','Sheet fetch failed: '+e.message); }
+}
+
+// ═══ PERSISTENCE ═════════════════════════════════════════════
+function saveRecipients(){ localStorage.setItem('iitm_rec', JSON.stringify(recipients)); }
+function saveLogs(){ localStorage.setItem('iitm_logs', JSON.stringify(logs.slice(0,500))); }
+function loadRecipients(){ try{ const r=JSON.parse(localStorage.getItem('iitm_rec')||'[]'); recipients=r; }catch{recipients=[];} }
+function loadLogs(){ try{ logs=JSON.parse(localStorage.getItem('iitm_logs')||'[]'); }catch{logs=[];} }
+
+// ═══ INIT ════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  loadConfig(); loadRecipients(); loadLogs();
+  renderTable(); renderLogs(); updateStats();
+  addLog('info','App ready.');
+  // Close modal on backdrop click
+  document.getElementById('preview-modal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
+});
+</script>
+</body>
+</html>
