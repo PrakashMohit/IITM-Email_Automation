@@ -229,7 +229,7 @@ input[type=checkbox]{width:15px;height:15px;accent-color:var(--accent);cursor:po
           </div>
           <div class="alert alert-info">
             <span>ℹ</span>
-            <div>Get free key at <strong>aistudio.google.com</strong> → Get API key → Create API key. Gemini 1.5 Flash is free (60 req/min).</div>
+            <div>Get free key at <strong>aistudio.google.com</strong> → Get API key → Create API key. Gemini 2.5 Flash is free (60 req/min).</div>
           </div>
           <button class="btn btn-ghost btn-sm" onclick="testGemini()">Test Gemini Key</button>
           <span id="gemini-test-result" style="font-size:12px;margin-left:10px;color:var(--muted)"></span>
@@ -736,7 +736,7 @@ async function callGemini(prompt, keyOverride) {
 
   // Direct Gemini call (fallback, works for testing)
   const r = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
     { method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         contents:[{parts:[{text:prompt}]}],
