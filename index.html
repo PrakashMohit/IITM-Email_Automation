@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IITM Placement Cell - HR Outreach</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>Placement Cell<br>Outreach</h1>
+      <p>Personalized HR email automation</p>
+    </div>
+
+    <div class="portal-switch">
+      <button class="portal-btn active" id="portal-ds" onclick="setPortal('ds')">DS</button>
+      <button class="portal-btn" id="portal-es" onclick="setPortal('es')">ES</button>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section-label">Workspace</div>
+      <div class="nav-item active" onclick="showPage('dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="showPage('recipients')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Recipients
+      </div>
+      <div class="nav-item" onclick="showPage('compose')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Compose
+      </div>
+      <div class="nav-item" onclick="showPage('send')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send Campaign
+      </div>
+      <div class="nav-section-label">Settings</div>
+      <div class="nav-item" onclick="showPage('cron')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Schedule
+      </div>
+      <div class="nav-item" onclick="showPage('logs')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Send Logs
+      </div>
+    </nav>
+
+    <div class="config-section">
+      <div id="conn-indicator" class="conn-status conn-idle">Not connected</div>
+      <button class="btn btn-ghost btn-sm" onclick="testConnection()" style="width:100%;margin-bottom:4px">Test Connection</button>
+      <label>Backend auto-detects from this server.</label>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div id="topbar-title" class="topbar-title">Dashboard</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="stat-pills">
+          <div class="stat-pill"><div class="dot dot-green"></div><span id="top-sent">0 sent</span></div>
+          <div class="stat-pill"><div class="dot dot-yellow"></div><span id="top-pending">0 pending</span></div>
+          <div class="stat-pill"><div class="dot dot-red"></div><span id="top-failed">0 failed</span></div>
+        </div>
+        <div style="position:relative">
+          <button class="btn btn-ghost btn-sm" id="settings-btn" onclick="toggleSettings(event)" title="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+            Settings
+          </button>
+
+          <div id="settings-dropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);width:420px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);z-index:200;box-shadow:var(--shadow);overflow:hidden">
+            <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+              <span style="font-family:var(--font-head);font-size:14px;font-weight:700">Settings</span>
+              <button onclick="closeSettings()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1">x</button>
+            </div>
+            <div style="padding:16px 18px;max-height:75vh;overflow-y:auto">
+              <div class="nav-section-label" style="padding-left:0">Backend</div>
+              <div class="field">
+                <label>Backend URL</label>
+                <input type="url" id="backend-url" placeholder="http://localhost:5000" oninput="saveConfig()">
+                <div style="font-size:11px;color:var(--muted);margin-top:4px">Auto-filled when the UI is opened from Flask.</div>
+              </div>
+
+              <div class="nav-section-label" style="padding-left:0">Ollama AI</div>
+              <div class="field">
+                <label>Ollama Base URL</label>
+                <input type="url" id="ollama-url" placeholder="http://localhost:11434" value="http://localhost:11434" oninput="saveConfig()">
+              </div>
+              <div class="field">
+                <label>Model</label>
+                <div style="display:flex;gap:8px">
+                  <select id="ollama-model" oninput="saveConfig()" style="flex:1">
+                    <option value="llama3.2">llama3.2</option>
+                    <option value="llama3.1">llama3.1</option>
+                    <option value="gemma3:4b">gemma3:4b</option>
+                    <option value="mistral">mistral</option>
+                    <option value="qwen2.5">qwen2.5</option>
+                  </select>
+                  <button class="btn btn-ghost btn-sm" onclick="fetchOllamaModels()">Refresh</button>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+                <button class="btn btn-ghost btn-sm" onclick="testOllama()">Test Ollama</button>
+                <span id="ollama-test-result" style="font-size:12px;color:var(--muted)"></span>
+              </div>
+
+              <div class="nav-section-label" style="padding-left:0">Gmail</div>
+              <div class="field">
+                <label>Gmail Address</label>
+                <input type="email" id="sender-email" placeholder="you@gmail.com" oninput="saveConfig()">
+              </div>
+              <div class="field">
+                <label>Gmail App Password <span style="color:var(--accent);font-size:11px">(not your regular password)</span></label>
+                <input type="password" id="gmail-pass" placeholder="xxxx xxxx xxxx xxxx" oninput="saveConfig()">
+              </div>
+              <div class="field">
+                <label>From Name</label>
+                <input type="text" id="from-name" value="IITM Placement Cell" oninput="saveConfig()">
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+                <button class="btn btn-ghost btn-sm" onclick="testGmail()">Test Gmail</button>
+                <span id="gmail-test-result" style="font-size:12px;color:var(--muted)"></span>
+              </div>
+
+              <div class="nav-section-label" style="padding-left:0">Defaults</div>
+              <div class="field">
+                <label>Default send delay (seconds)</label>
+                <input type="number" id="send-delay" value="4" min="2" max="60" style="width:90px" oninput="saveConfig()">
+              </div>
+              <div class="field">
+                <label>Cron time (IST)</label>
+                <input type="time" id="cron-time" value="09:00" oninput="saveConfig()">
+              </div>
+              <div class="field">
+                <label>Google Sheet CSV URL</label>
+                <input type="url" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/..." oninput="saveConfig()">
+              </div>
+              <div class="field">
+                <label>Poll every (minutes)</label>
+                <input type="number" id="poll-interval" value="30" min="5" style="width:90px" oninput="saveConfig()">
+              </div>
+            </div>
+            <div style="padding:12px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end">
+              <button class="btn btn-primary btn-sm" onclick="saveConfig();closeSettings()">Save and Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div id="page-dashboard" class="tab-pane active fade-in">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="label">Total</div><div class="value val-green" id="stat-total">0</div><div style="font-size:11px;color:var(--muted)">recipients</div></div>
+          <div class="stat-card"><div class="label">Sent</div><div class="value val-teal" id="stat-sent">0</div><div style="font-size:11px;color:var(--muted)">delivered</div></div>
+          <div class="stat-card"><div class="label">Pending</div><div class="value val-warn" id="stat-pending">0</div><div style="font-size:11px;color:var(--muted)">to send</div></div>
+          <div class="stat-card"><div class="label">Failed</div><div class="value val-red" id="stat-failed">0</div><div style="font-size:11px;color:var(--muted)">check logs</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="card-header">
+              <h3>Recent Recipients</h3>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('recipients')">View All</button>
+            </div>
+            <div class="card-body" style="padding:0"><div id="dash-recent-table"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Activity Log</h3></div>
+            <div class="log-container" id="dashboard-log" style="height:260px;border:none;border-radius:0"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-recipients" class="tab-pane fade-in">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div>
+            <h2 style="font-family:var(--font-head);font-size:20px">Recipients</h2>
+            <p style="font-size:13px;color:var(--muted);margin-top:3px">CSV columns: S.No, Date, Company Name, Job post, Job Post Link, Email ID</p>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-ghost btn-sm" onclick="clearRecipients()">Clear all</button>
+            <button class="btn btn-ghost btn-sm" onclick="enrichRecipients()">Resolve companies</button>
+            <button class="btn btn-primary btn-sm" onclick="document.getElementById('csv-upload').click()">Upload CSV</button>
+            <input type="file" id="csv-upload" accept=".csv,.tsv,.txt" style="display:none" onchange="handleCSVUpload(event)">
+          </div>
+        </div>
+
+        <div id="drop-area" class="drop-area" onclick="document.getElementById('csv-upload').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+          <p style="font-size:15px;margin-bottom:4px;font-weight:700">Drop your Google Sheet CSV here or click to upload</p>
+          <span style="font-size:12px;color:var(--muted)">Company name can be blank. Use Resolve companies after upload.</span>
+        </div>
+
+        <div style="margin:18px 0;display:flex;align-items:center;gap:12px;color:var(--muted2);font-size:11px;text-transform:uppercase;letter-spacing:.06em">
+          <div style="flex:1;height:1px;background:var(--border)"></div>or paste CSV data<div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:20px">
+          <textarea id="paste-area" placeholder="1,,SnapMint,Data Analyst,,hr@snapmint.com" style="height:80px;font-family:var(--font-mono);font-size:12px"></textarea>
+          <button class="btn btn-ghost" onclick="parsePastedData()" style="align-self:flex-end">Parse</button>
+        </div>
+
+        <div id="recipients-table-wrap" style="display:none">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <div style="font-size:13px;color:var(--muted)"><strong id="rec-count" style="color:var(--accent)">0</strong> recipients</div>
+            <div id="domain-filter" style="display:flex;gap:6px"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th><input type="checkbox" id="select-all" onchange="toggleSelectAll(this.checked)"></th><th>#</th><th>Company</th><th>Job Post</th><th>Email</th><th>Domain</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="recipients-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div id="no-recipients" style="text-align:center;padding:50px 20px;color:var(--muted);display:none">
+          <h3 style="font-family:var(--font-head);color:var(--text);margin-bottom:6px">No recipients yet</h3>
+          <p>Upload CSV or paste data above.</p>
+        </div>
+      </div>
+
+      <div id="page-compose" class="tab-pane fade-in">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <div>
+            <h2 style="font-family:var(--font-head);font-size:20px;margin-bottom:18px">Email Template</h2>
+            <div class="card" style="padding:20px">
+              <div class="field">
+                <label>Email Subject</label>
+                <input type="text" id="subject-template" value="Placement Opportunity - IITM Students | {{job_post}} at {{company}}" oninput="saveConfig()">
+                <div style="font-size:11px;color:var(--muted);margin-top:5px">Variables: <span class="tag">{{company}}</span> <span class="tag">{{job_post}}</span> <span class="tag">{{domain}}</span></div>
+              </div>
+              <div class="field">
+                <label>AI Prompt for Ollama</label>
+                <textarea id="ai-prompt-template" rows="13" oninput="saveConfig()">Write a professional cold outreach email on behalf of IITM (IIT Madras) Placement Cell.
+
+Details:
+- HR/Recipient: {{hr_name}}
+- Company: {{company}}
+- Job Role they posted: {{job_post}}
+- Their LinkedIn Post: {{job_link}}
+- LinkedIn/company context found: {{post_context}}
+- Our Domain focus: {{domain}}
+- Useful links/brochures to mention: {{asset_links}}
+
+Requirements:
+1. Start with "Dear {{hr_name}},". Use "Hiring Manager" if name unknown.
+2. First line: mention you saw their LinkedIn/job post for {{job_post}} at {{company}}.
+3. Introduce IITM Placement Cell and relevant student strengths for {{domain}}.
+4. Offer to share matching student profiles/CVs.
+5. Close with a clear CTA for a brief call or JD sharing.
+6. Keep it 160-200 words. Professional, specific, and warm.
+
+Output only the email body. No subject line. Start directly with "Dear".</textarea>
+              </div>
+              <div class="field">
+                <label>Email Signature</label>
+                <textarea id="signature" rows="4" oninput="saveConfig()">Best regards,
+[Your Name]
+IITM Placement Cell, IIT Madras
+placement@iitm.ac.in | iitm.ac.in</textarea>
+              </div>
+
+              <div class="upload-box">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                  <div>
+                    <strong>Template links and attachments</strong>
+                    <div style="font-size:12px;color:var(--muted)">Saved per portal until you delete them here.</div>
+                  </div>
+                  <button class="btn btn-primary btn-sm" onclick="document.getElementById('asset-upload').click()">Upload files</button>
+                  <input type="file" id="asset-upload" multiple accept=".pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg" style="display:none" onchange="uploadAssetFiles(event)">
+                </div>
+                <div class="field" style="margin-top:12px">
+                  <label>Brochure / prospectus links</label>
+                  <textarea id="asset-links" rows="3" placeholder="https://iitm.ac.in/brochure.pdf" oninput="saveConfig();renderAssets()"></textarea>
+                </div>
+                <textarea id="attachment-paths" style="display:none" oninput="saveConfig();renderAssets()"></textarea>
+                <div class="asset-list" id="asset-list"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+              <h2 style="font-family:var(--font-head);font-size:20px">Live Preview</h2>
+              <button class="btn btn-ghost btn-sm" onclick="generatePreview()">Generate</button>
+            </div>
+            <div class="field">
+              <label>Preview for recipient</label>
+              <select id="preview-recipient"><option value="">-- Select a recipient --</option></select>
+            </div>
+            <div class="email-preview" id="email-preview-box">
+              <div class="email-preview-header">
+                <div><strong>To:</strong> <span id="pv-to">-</span></div>
+                <div style="margin-top:3px"><strong>Subject:</strong> <span id="pv-subject">-</span></div>
+              </div>
+              <div class="email-preview-body" id="pv-body">Select a recipient and click Generate to see the personalized email.</div>
+            </div>
+            <div id="pv-char-count" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:right"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-send" class="tab-pane fade-in">
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px">
+          <div>
+            <h2 style="font-family:var(--font-head);font-size:20px;margin-bottom:4px">Send Campaign</h2>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:18px">Ollama generates a unique email per HR, then Gmail sends it with your saved template attachments.</p>
+            <div id="backend-warning" class="alert alert-warn" style="display:none"><span>!</span><div>Backend URL is not set. It should auto-fill when opened from Flask.</div></div>
+            <div class="card" style="margin-bottom:14px">
+              <div class="card-header"><h3>Campaign Settings</h3></div>
+              <div class="card-body">
+                <div class="field-row">
+                  <div class="field">
+                    <label>Send to domain</label>
+                    <select id="send-domain"><option value="all">All domains</option><option value="Data Science">Data Science</option><option value="Embedded Systems">Embedded Systems</option></select>
+                  </div>
+                  <div class="field">
+                    <label>Recipients filter</label>
+                    <select id="send-filter"><option value="pending">Pending only</option><option value="all">All</option><option value="failed">Failed retry</option></select>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Delay between emails (seconds)</label>
+                  <input type="number" id="send-delay" value="4" min="2" max="60" style="width:100px">
+                </div>
+              </div>
+            </div>
+            <div id="progress-section" style="display:none">
+              <div class="progress-outer">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span id="progress-label" style="font-size:13px;font-weight:700">Sending...</span><span id="progress-pct" style="font-size:13px;color:var(--accent);font-family:var(--font-mono)">0%</span></div>
+                <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+                <div class="progress-stats"><span id="ps-sent" style="color:var(--success)">0 sent</span><span id="ps-failed" style="color:var(--danger)">0 failed</span><span id="ps-remaining" style="color:var(--muted)">calculating...</span></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:12px">
+              <button class="btn btn-primary" id="start-btn" onclick="startCampaign()">Start Campaign</button>
+              <button class="btn btn-ghost" id="stop-btn" onclick="stopCampaign()" style="display:none">Stop</button>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-family:var(--font-head);font-size:15px;margin-bottom:10px">Live Log</h3>
+            <div class="log-container" id="send-log" style="height:420px"><div class="log-entry"><span class="log-time">--:--</span><span class="log-info">Ready. Press Start Campaign.</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-cron" class="tab-pane fade-in">
+        <h2 style="font-family:var(--font-head);font-size:20px;margin-bottom:4px">Schedule / Automation</h2>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Auto-detect new rows from Google Sheet and send daily at a fixed time.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="cron-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <div><div style="font-size:14px;font-weight:700">Daily scheduled send</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Auto-send pending recipients at set time.</div></div>
+              <div class="toggle-switch" id="cron-toggle" onclick="toggleCron()"><div class="toggle-knob"></div></div>
+            </div>
+            <div class="field"><label>Send time (IST)</label><input type="time" id="cron-time" value="09:00" oninput="saveConfig()"></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+              <label><input type="checkbox" class="day-check" value="Mon" checked> Mon</label>
+              <label><input type="checkbox" class="day-check" value="Tue" checked> Tue</label>
+              <label><input type="checkbox" class="day-check" value="Wed" checked> Wed</label>
+              <label><input type="checkbox" class="day-check" value="Thu" checked> Thu</label>
+              <label><input type="checkbox" class="day-check" value="Fri" checked> Fri</label>
+              <label><input type="checkbox" class="day-check" value="Sat"> Sat</label>
+            </div>
+            <div id="cron-status" style="font-size:12px;color:var(--muted);padding:10px;background:var(--surface2);border-radius:var(--radius)">Cron <strong style="color:var(--danger)">disabled</strong></div>
+          </div>
+          <div class="cron-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <div><div style="font-size:14px;font-weight:700">Auto-detect new sheet rows</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Polls your Google Sheet CSV link.</div></div>
+              <div class="toggle-switch" id="poll-toggle" onclick="togglePoll()"><div class="toggle-knob"></div></div>
+            </div>
+            <div class="field"><label>Google Sheet public CSV URL</label><input type="url" id="sheet-url" placeholder="https://docs.google.com/spreadsheets/d/.../export?format=csv" oninput="saveConfig()"></div>
+            <div class="field"><label>Poll every (minutes)</label><input type="number" id="poll-interval" value="30" min="5" style="width:90px"></div>
+            <button class="btn btn-ghost btn-sm" onclick="fetchSheetNow()">Fetch Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-logs" class="tab-pane fade-in">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+          <div><h2 style="font-family:var(--font-head);font-size:20px">Send Logs</h2><p style="font-size:13px;color:var(--muted);margin-top:3px">Full history of all campaign sends.</p></div>
+          <button class="btn btn-danger btn-sm" onclick="clearLogs()">Clear logs</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Time</th><th>Portal</th><th>Email</th><th>Company</th><th>Job Post</th><th>Status</th><th>Message</th></tr></thead>
+            <tbody id="logs-tbody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:40px">No logs yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="preview-modal">
+  <div class="modal-box">
+    <h2>Email Preview</h2>
+    <p id="modal-desc" style="color:var(--muted);font-size:13px;margin-bottom:14px">AI-generated email</p>
+    <div class="email-preview">
+      <div class="email-preview-header">
+        <div><strong>To:</strong> <span id="modal-to">-</span></div>
+        <div style="margin-top:3px"><strong>Subject:</strong> <span id="modal-subject">-</span></div>
+      </div>
+      <div class="email-preview-body" id="modal-body" style="min-height:220px"></div>
+    </div>
+    <div id="modal-char-count" style="font-size:11px;color:var(--muted);margin-top:6px;text-align:right"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      <button class="btn btn-primary" id="modal-send-btn" onclick="sendSingleEmail()">Send this email</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
